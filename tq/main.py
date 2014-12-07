@@ -26,15 +26,23 @@ def get_featured(url):
     response = urllib.request.urlopen(url).read()
     streams = json.loads(response.decode('utf8'))
     for stream in streams["featured"]:
-        print(stream["stream"]["channel"]["name"], stream["stream"]["channel"]["url"])
+        print(stream["stream"]["channel"]["name"],
+              stream["stream"]["channel"]["url"])
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='tq')
-    parser.add_argument("-f", "--featured", help="Get a list of featured streams", action="store_true")
-    parser.add_argument("-g", "--games", help="Get games by number of viewers", action="store_true")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s alpha version v0.1")
-    parser.add_argument("--game", help="Find games")
+    parser.add_argument("-f", "--featured",
+                        help="Get a list of featured streams",
+                        action="store_true")
+    parser.add_argument("-g", "--games",
+                        help="Get games by number of viewers",
+                        action="store_true")
+    parser.add_argument("-v", "--version",
+                        action="version",
+                        version="%(prog)s alpha version v0.1")
+    parser.add_argument("--game",
+                        help="Find games")
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
