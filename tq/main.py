@@ -5,14 +5,19 @@ import json
 
 
 def get_featured(url):
-    response = urllib.request.urlopen(url).read()
+    req = urllib.request.Request(url)
+    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
+    response = urllib.request.urlopen(req).read()
     streams = json.loads(response.decode('utf8'))
     for stream in streams["featured"]:
         print("Channel: {:<20}{}".format(stream["stream"]["channel"]["name"],
               stream["stream"]["channel"]["url"]))
 
+
 def get_games(url):
-    response = urllib.request.urlopen(url).read()
+    req = urllib.request.Request(url)
+    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
+    response = urllib.request.urlopen(req).read()
     streams = json.loads(response.decode('utf8'))
     for stream in streams["top"]:
         print("{}".format(stream))
@@ -29,8 +34,8 @@ if __name__ == '__main__':
     parser.add_argument("-v", "--version",
                         action="version",
                         version="%(prog)s alpha version v0.1")
-    parser.add_argument("--game",
-                        help="Find games")
+    parser.add_argument("-s", "--streams",
+                        help="Find Sreams of <GAME>")
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
