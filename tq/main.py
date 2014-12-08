@@ -8,19 +8,28 @@ def get_featured(url):
     req = urllib.request.Request(url)
     req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
     response = urllib.request.urlopen(req).read()
-    streams = json.loads(response.decode('utf8'))
-    for stream in streams["featured"]:
-        print("Channel: {:<20}{}".format(stream["stream"]["channel"]["name"],
-              stream["stream"]["channel"]["url"]))
+    content = json.loads(response.decode('utf8'))
+    for c in content["featured"]:
+        print("Channel: {:<20}{}".format(c["stream"]["channel"]["name"],
+              c["stream"]["channel"]["url"]))
 
 
 def get_games(url):
     req = urllib.request.Request(url)
     req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
     response = urllib.request.urlopen(req).read()
-    streams = json.loads(response.decode('utf8'))
-    for stream in streams["top"]:
-        print("{}".format(stream))
+    content = json.loads(response.decode('utf8'))
+    for c in content["top"]:
+        print("{}".format(c))
+
+
+def get_streams(url):
+    req = urllib.request.Request(url)
+    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
+    response = urllib.request.urlopen(req).read()
+    content = json.loads(response.decode('utf8'))
+    for c in content["streams"]:
+        print("{}".format(c))
 
 
 if __name__ == '__main__':
@@ -44,5 +53,10 @@ if __name__ == '__main__':
 
     if args.featured:
         get_featured("https://api.twitch.tv/kraken/streams/featured")
+
     if args.games:
         get_games("https://api.twitch.tv/kraken/games/top")
+
+    if args.streams:
+        url = "https://api.twitch.tv/kraken/search/streams?q=" + args.streams
+        get_streams(url)
