@@ -3,31 +3,19 @@ import sys
 import urllib.request
 import json
 
-""" crap
-Class Stream(object):
-    def __init__(self):
-        pass
-
-    def _geturl(self, url):
-        self.response = urllib.request.urlopen(url)
-        return self.response.read()
-
-    def _getjson(self, url):
-        self.json = json.loads(self._geturl(url).decode('utf8'))
-        for results in self.json["featured"]:
-            return results["stream"]["channel"]["url"]
-
-    def getstream(self, url):
-        print(json.dumps(self._getjson(url), indent=4))
-"""
-
 
 def get_featured(url):
     response = urllib.request.urlopen(url).read()
     streams = json.loads(response.decode('utf8'))
     for stream in streams["featured"]:
-        print(stream["stream"]["channel"]["name"],
-              stream["stream"]["channel"]["url"])
+        print("Channel: {:<20}{}".format(stream["stream"]["channel"]["name"],
+              stream["stream"]["channel"]["url"]))
+
+def get_games(url):
+    response = urllib.request.urlopen(url).read()
+    streams = json.loads(response.decode('utf8'))
+    for stream in streams["top"]:
+        print("{}".format(stream))
 
 
 if __name__ == '__main__':
@@ -51,3 +39,5 @@ if __name__ == '__main__':
 
     if args.featured:
         get_featured("https://api.twitch.tv/kraken/streams/featured")
+    if args.games:
+        get_games("https://api.twitch.tv/kraken/games/top")
