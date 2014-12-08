@@ -4,59 +4,84 @@ import urllib.request
 import json
 
 
-def get_featured(url):
+apiversion = 2
+apiurl = "https://api.twitch.tv/kraken"
+
+
+class StreamURL(object):
+    def __init__(self):
+        self.apiurl = "https://api.twitch.tv/kraken"
+
+    def build_url(self, option):
+        options = {"featured": "/streams/featured",
+                   "top": "/games/top",
+                   "search": "/search/streams?q="
+        }
+        return self.apiurl + options[option]
+
+
+def get_data(url):
     req = urllib.request.Request(url)
-    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
+    req.add_header('Accept', 'application/vnd.twitchtv.v{}+json'.format(
+        apiversion))
     response = urllib.request.urlopen(req).read()
     content = json.loads(response.decode('utf8'))
+    return content
+
+
+def handle_featured(url):
+    content = get_data(url)
     for c in content["featured"]:
-        print("Channel: {:<20}{}".format(c["stream"]["channel"]["name"],
-              c["stream"]["channel"]["url"]))
+        name = c["stream"]["channel"]["name"]
+        url = c["stream"]["channel"]["url"]
+        print("Channel: {:<20}{}".format(name, url))
 
 
 def get_games(url):
-    req = urllib.request.Request(url)
-    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
-    response = urllib.request.urlopen(req).read()
-    content = json.loads(response.decode('utf8'))
+    content = get_data(url)
     for c in content["top"]:
-        print("{}".format(c))
+        print("{:<40} Viewers:{}".format(c["game"]["name"], c["viewers"]))
 
 
 def get_streams(url):
-    req = urllib.request.Request(url)
-    req.add_header('Accept', 'application/vnd.twitchtv.v2+json')
-    response = urllib.request.urlopen(req).read()
-    content = json.loads(response.decode('utf8'))
+    content = get_data(url)
     for c in content["streams"]:
         print("{}".format(c))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='tq')
-    parser.add_argument("-f", "--featured",
-                        help="Get a list of featured streams",
-                        action="store_true")
-    parser.add_argument("-g", "--games",
-                        help="Get games by number of viewers",
-                        action="store_true")
-    parser.add_argument("-v", "--version",
-                        action="version",
-                        version="%(prog)s alpha version v0.1")
-    parser.add_argument("-s", "--streams",
-                        help="Find Sreams of <GAME>")
+    mainarguments = parser.add_argument_group("Main Arguments")
+    mainarguments.add_argument("-f", "--featured",
+                               help="Get a list of featured streams",
+                               action="store_true")
+    mainarguments.add_argument("-t", "--top",
+                               help="Get games by number of viewers",
+                               action="store_true")
+    mainarguments.add_argument("-v", "--version",
+                               action="version",
+                               version="%(prog)s alpha version v0.1")
+    mainarguments.add_argument("-s", "--streams",
+                               help="Find Sreams of <GAME>")
+    optionarguments = parser.add_argument_group("Option Arguments")
+    optionarguments.add_argument("--limit",
+                                 type=int,
+                                 default=25,
+                                 help="limit query to <limit> results")
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
 
+    s = StreamURL()
+    urls = []
+
     if args.featured:
-        get_featured("https://api.twitch.tv/kraken/streams/featured")
-
-    if args.games:
-        get_games("https://api.twitch.tv/kraken/games/top")
-
+        urls.append(s.build_url("featured"))
+    if args.top:
+        urls.append(s.build_url("top"))
     if args.streams:
-        url = "https://api.twitch.tv/kraken/search/streams?q=" + args.streams
-        get_streams(url)
+        urls.append(s.build_url("search") + args.streams)
+
+    print(urls)
