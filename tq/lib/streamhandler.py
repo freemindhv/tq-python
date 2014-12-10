@@ -7,7 +7,7 @@ class StreamHandler:
         self.url = None
 
     def get_stream(self):
-        print("not implemented yet")
+        raise Warning("Streamhandler has no get_stream function")
 
     def get_json(self):
         req = urllib.request.Request(self.url)
