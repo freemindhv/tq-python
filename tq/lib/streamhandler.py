@@ -31,7 +31,7 @@ class FeaturedStream(StreamHandler):
 
 class TopGames(StreamHandler):
     def __init__(self):
-        self.url = StreamURL().build_url("top")
+        self.url = "https://api.twitch.tv/kraken/games/top"
 
     def get_stream(self):
         content = self.get_json()
