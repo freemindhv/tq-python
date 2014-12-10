@@ -2,18 +2,6 @@ import urllib.request
 import json
 
 
-class StreamURL:
-    def __init__(self):
-        self.apiurl = "https://api.twitch.tv/kraken"
-
-    def build_url(self, option):
-        options = {"featured": "/streams/featured",
-                   "top": "/games/top",
-                   "search": "/search/streams?q="
-        }
-        return self.apiurl + options[option]
-
-
 class StreamHandler:
     def __init__(self):
         self.url = None
