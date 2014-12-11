@@ -44,16 +44,19 @@ class TopGames(Query):
 
         for c in content["top"]:
             print("   {:40} Viewers:{}".format(c["game"]["name"],
-                                                       c["viewers"]))
+                                               c["viewers"]))
 
 
 class SearchGames(Query):
     def __init__(self, searchstring, limit):
+        self.searchstring = searchstring
         self.url = "{}search/streams?q={}&limit={}".format(Query.base_url,
-                                                           searchstring, limit)
+                                                       self.searchstring, limit)
 
     def get_results(self):
         content = self.get_json()
+
+        print("[ Games tagged with ={}= ]:".format(self.searchstring))
 
         for c in content["streams"]:
             name = c["channel"]["name"]
