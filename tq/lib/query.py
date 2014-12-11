@@ -8,8 +8,8 @@ class Query:
     def get_results(self):
         raise AttributeError("StreamHandler has no get_stream function")
 
-    def get_json(self):
-        req = urllib.request.Request(self.url)
+    def get_json(self, url):
+        req = urllib.request.Request(url)
         req.add_header("Accept", "application/vnd.twitchtv.v2")
 
         response = urllib.request.urlopen(req).read()
@@ -22,7 +22,7 @@ class FeaturedStream(Query):
         self.url = "{}streams/featured?limit={}".format(Query.base_url, limit)
 
     def get_results(self):
-        content = self.get_json()
+        content = self.get_json(self.url)
 
         print("[ Featured ]:")
 
@@ -38,7 +38,7 @@ class TopGames(Query):
         self.url = "{}games/top?limit={}".format(Query.base_url, limit)
 
     def get_results(self):
-        content = self.get_json()
+        content = self.get_json(self.url)
 
         print("[ Top ]:")
 
@@ -54,9 +54,9 @@ class SearchGames(Query):
                                                        self.searchstring, limit)
 
     def get_results(self):
-        content = self.get_json()
+        content = self.get_json(self.url)
 
-        print("[ Games tagged with ={}= ]:".format(self.searchstring))
+        print("[ Streams tagged with ={}= ]:".format(self.searchstring))
 
         for c in content["streams"]:
             name = c["channel"]["name"]
