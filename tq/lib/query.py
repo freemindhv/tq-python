@@ -8,7 +8,8 @@ class Query:
     def get_results(self):
         raise AttributeError("StreamHandler has no get_stream function")
 
-    def get_json(self, url):
+    @staticmethod
+    def get_json(url):
         req = urllib.request.Request(url)
         req.add_header("Accept", "application/vnd.twitchtv.v2")
 
@@ -43,8 +44,9 @@ class TopGames(Query):
         print("[ Top ]:")
 
         for c in content["top"]:
-            print("   {:40} Viewers:{}".format(c["game"]["name"],
-                                               c["viewers"]))
+            name = c["game"]["name"]
+            viewers = c["viewers"]
+            print("   {:40} Viewers:{}".format(name, viewers))
 
 
 class SearchGames(Query):
@@ -61,4 +63,5 @@ class SearchGames(Query):
         for c in content["streams"]:
             name = c["channel"]["name"]
             url = c["channel"]["url"]
-            print("   {:20}{}".format(name, url))
+            viewers = c["viewers"]
+            print("   {:20}{:40}  Viewers:{}".format(name, url, viewers))
