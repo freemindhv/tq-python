@@ -1,4 +1,4 @@
-from lib.query import FeaturedStream, TopGames, SearchGames
+from lib.query import FeaturedStream, TopGames, SearchGames, DebugPrint
 from lib.argparser import parser
 
 
@@ -14,6 +14,9 @@ if __name__ == '__main__':
 
     if args.streams:
         streams.append(SearchGames(args.streams, args.limit))
+
+    if args.debug:
+        streams.append(DebugPrint(args.debug))
 
     for stream in streams:
         stream.get_results()
