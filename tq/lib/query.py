@@ -65,3 +65,11 @@ class SearchGames(Query):
             url = c["channel"]["url"]
             viewers = c["viewers"]
             print("   {:20}{:40}  Viewers:{}".format(name, url, viewers))
+
+
+class BookMarks(Query):
+    def __init__(self, streamurl):
+        self.streamurl = streamurl
+
+    def get_results(self):
+        print(self.streamurl)
