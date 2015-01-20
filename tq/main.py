@@ -1,4 +1,4 @@
-from lib.query import FeaturedStream, TopGames, SearchGames, BookMarks
+from lib.query import FeaturedStream, TopGames, SearchGames, DebugPrint, BookMarks
 from lib.argparser import parser
 
 
@@ -17,6 +17,9 @@ if __name__ == '__main__':
 
     if args.bookmark:
         streams.append(BookMarks(args.bookmark))
+		
+    if args.debug:
+        streams.append(DebugPrint(args.debug))
 
     for stream in streams:
         stream.get_results()

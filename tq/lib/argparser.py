@@ -14,8 +14,13 @@ mainarguments.add_argument("-v", "--version",
                            version="%(prog)s alpha version v0.1")
 mainarguments.add_argument("-s", "--streams",
                            help="Find Sreams of <GAME>")
+<<<<<<< HEAD
 mainarguments.add_argument("-b", "--bookmark",
                            help="Bookmark a stream")
+=======
+mainarguments.add_argument("-D", "--debug",
+                           help="Print the argparse input")
+>>>>>>> dee4426336d77129344ff0c5ea560356adea0109
 optionarguments = parser.add_argument_group("Option Arguments")
 optionarguments.add_argument("--limit",
                              type=int,

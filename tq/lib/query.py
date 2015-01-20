@@ -18,6 +18,14 @@ class Query:
         return json.loads(response.decode('utf8'))
 
 
+class DebugPrint(Query):
+    def __init__(self, debug_msg):
+        self.debug_msg = debug_msg
+
+    def get_results(self):
+        print(self.debug_msg)
+
+
 class FeaturedStream(Query):
     def __init__(self, limit):
         self.url = "{}streams/featured?limit={}".format(Query.base_url, limit)
